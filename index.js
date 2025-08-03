@@ -32,22 +32,37 @@ const buttons = document.querySelector("#buttons");
 
 buttons.addEventListener("click", (e) => {
   let btn = e.target;
+  const btnClasses = ["digit", "decimal", "del"].some((cls) =>
+    btn.classList.contains(cls)
+  );
 
-  if (btn.classList.contains("digit") || btn.classList.contains("decimal")) {
+  if (btnClasses) {
     if (operator === "") {
       if (lastResult) {
         result = "";
         lastResult = false;
       }
       if (result.includes(".") && btn.classList.contains("decimal")) return;
-      result += btn.textContent;
-      display.textContent = result;
+      if (btn.classList.contains("del")) {
+        result = result.slice(0, -1);
+        display.textContent = result;
+      } else {
+        result += btn.textContent;
+        display.textContent = result;
+      }
     } else {
       if (num.includes(".") && btn.classList.contains("decimal")) return;
-      num += btn.textContent;
-      display.textContent = num;
+      if (btn.classList.contains("del")) {
+        if (!num) return;
+        num = num.slice(0, -1);
+        display.textContent = num;
+      } else {
+        num += btn.textContent;
+        display.textContent = num;
+      }
     }
-  } else if (btn.classList.contains("operator")) {
+  }
+  if (btn.classList.contains("operator")) {
     if (result !== "" && num !== "") {
       operate(num, operator);
       display.textContent = result;
@@ -55,13 +70,15 @@ buttons.addEventListener("click", (e) => {
       lastResult = true;
     }
     operator = btn.textContent;
-  } else if (btn.classList.contains("equal")) {
+  }
+  if (btn.classList.contains("equal")) {
     operate(num, operator);
     display.textContent = result;
     operator = "";
     num = "";
     lastResult = true;
-  } else if (btn.classList.contains("clear")) {
+  }
+  if (btn.classList.contains("clear")) {
     result = "";
     num = "";
     operator = "";
