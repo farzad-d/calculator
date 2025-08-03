@@ -18,7 +18,11 @@ function operate(n, op) {
       result = Math.round(left * right * 1e10) / 1e10;
       break;
     case "/":
-      result = Math.round((left / right) * 1e10) / 1e10;
+      if (right === 0) {
+        result = "NaN";
+      } else {
+        result = Math.round((left / right) * 1e10) / 1e10;
+      }
       break;
   }
 }
@@ -29,15 +33,17 @@ const buttons = document.querySelector("#buttons");
 buttons.addEventListener("click", (e) => {
   let btn = e.target;
 
-  if (btn.classList.contains("digit")) {
+  if (btn.classList.contains("digit") || btn.classList.contains("decimal")) {
     if (operator === "") {
       if (lastResult) {
         result = "";
         lastResult = false;
       }
+      if (result.includes(".") && btn.classList.contains("decimal")) return;
       result += btn.textContent;
       display.textContent = result;
     } else {
+      if (num.includes(".") && btn.classList.contains("decimal")) return;
       num += btn.textContent;
       display.textContent = num;
     }
