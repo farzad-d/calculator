@@ -9,16 +9,16 @@ function operate(n, op) {
 
   switch (op) {
     case "+":
-      result = left + right;
+      result = Math.round((left + right) * 1e10) / 1e10;
       break;
     case "-":
-      result = left - right;
+      result = Math.round((left - right) * 1e10) / 1e10;
       break;
     case "*":
-      result = left * right;
+      result = Math.round(left * right * 1e10) / 1e10;
       break;
     case "/":
-      result = left / right;
+      result = Math.round((left / right) * 1e10) / 1e10;
       break;
   }
 }
