@@ -55,5 +55,11 @@ buttons.addEventListener("click", (e) => {
     operator = "";
     num = "";
     lastResult = true;
+  } else if (btn.classList.contains("clear")) {
+    result = "";
+    num = "";
+    operator = "";
+    lastResult = false;
+    display.textContent = result;
   }
 });
