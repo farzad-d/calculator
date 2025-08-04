@@ -107,3 +107,17 @@ calcState.buttons.addEventListener("click", (e) => {
   handleEqualClick(button, calcState);
   handleClearClick(button, calcState);
 });
+
+document.addEventListener("keydown", (e) => {
+  const keyMap = {
+    Enter: "=",
+    Backspace: "Del",
+    Escape: "C",
+  };
+  let key = keyMap[e.key] || e.key;
+
+  const buttons = calcState.buttons.querySelectorAll("button");
+  const button = [...buttons].find((btn) => btn.textContent === key);
+
+  if (button) button.click();
+});
