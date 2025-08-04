@@ -1,88 +1,109 @@
-let operator = "";
-let result = "";
-let num = "";
-let lastResult = false;
+const calcState = {
+  result: "",
+  num: "",
+  operator: "",
+  lastResult: false,
+  display: document.querySelector("#display"),
+  buttons: document.querySelector("#buttons"),
+};
 
-function operate(n, op) {
-  const left = Number(result);
-  const right = Number(n);
+function operate(st) {
+  const left = Number(st.result);
+  const right = Number(st.num);
 
-  switch (op) {
+  switch (st.operator) {
     case "+":
-      result = Math.round((left + right) * 1e10) / 1e10;
+      st.result = Math.round((left + right) * 1e10) / 1e10;
       break;
     case "-":
-      result = Math.round((left - right) * 1e10) / 1e10;
+      st.result = Math.round((left - right) * 1e10) / 1e10;
       break;
     case "*":
-      result = Math.round(left * right * 1e10) / 1e10;
+      st.result = Math.round(left * right * 1e10) / 1e10;
       break;
     case "/":
       if (right === 0) {
-        result = "NaN";
+        st.result = "NaN";
       } else {
-        result = Math.round((left / right) * 1e10) / 1e10;
+        st.result = Math.round((left / right) * 1e10) / 1e10;
       }
       break;
   }
 }
 
-const display = document.querySelector("#display");
-const buttons = document.querySelector("#buttons");
+function insertOrDelete(btn, st, key) {
+  if (btn.classList.contains("del")) {
+    if (key === "num" && !st.num) return;
+    st[key] = st[key].slice(0, -1);
+  } else {
+    st[key] += btn.textContent;
+  }
+  st.display.textContent = st[key];
+}
 
-buttons.addEventListener("click", (e) => {
-  let btn = e.target;
+function hasDecimalAlready(btn, val) {
+  return val.includes(".") && btn.classList.contains("decimal");
+}
+
+function handleDigitClick(btn, st) {
   const btnClasses = ["digit", "decimal", "del"].some((cls) =>
     btn.classList.contains(cls)
   );
 
   if (btnClasses) {
-    if (operator === "") {
-      if (lastResult) {
-        result = "";
-        lastResult = false;
+    if (st.operator === "") {
+      if (st.lastResult) {
+        st.result = "";
+        st.lastResult = false;
       }
-      if (result.includes(".") && btn.classList.contains("decimal")) return;
-      if (btn.classList.contains("del")) {
-        result = result.slice(0, -1);
-        display.textContent = result;
-      } else {
-        result += btn.textContent;
-        display.textContent = result;
-      }
+      if (hasDecimalAlready(btn, st.result)) return;
+      insertOrDelete(btn, st, "result");
     } else {
-      if (num.includes(".") && btn.classList.contains("decimal")) return;
-      if (btn.classList.contains("del")) {
-        if (!num) return;
-        num = num.slice(0, -1);
-        display.textContent = num;
-      } else {
-        num += btn.textContent;
-        display.textContent = num;
-      }
+      if (hasDecimalAlready(btn, st.num)) return;
+      insertOrDelete(btn, st, "num");
     }
   }
+}
+
+function handleOperatorClick(btn, st) {
   if (btn.classList.contains("operator")) {
-    if (result !== "" && num !== "") {
-      operate(num, operator);
-      display.textContent = result;
-      num = "";
-      lastResult = true;
+    if (st.result !== "" && st.num !== "") {
+      operate(st);
+      st.display.textContent = st.result;
+      st.num = "";
+      st.lastResult = true;
     }
-    operator = btn.textContent;
+    st.operator = btn.textContent;
   }
+}
+
+function handleEqualClick(btn, st) {
   if (btn.classList.contains("equal")) {
-    operate(num, operator);
-    display.textContent = result;
-    operator = "";
-    num = "";
-    lastResult = true;
+    operate(st);
+    st.display.textContent = st.result;
+    st.operator = "";
+    st.num = "";
+    st.lastResult = true;
   }
+}
+
+function handleClearClick(btn, st) {
   if (btn.classList.contains("clear")) {
-    result = "";
-    num = "";
-    operator = "";
-    lastResult = false;
-    display.textContent = result;
+    st.result = "";
+    st.num = "";
+    st.operator = "";
+    st.lastResult = false;
+    st.display.textContent = st.result;
   }
+}
+
+//############################################################
+
+calcState.buttons.addEventListener("click", (e) => {
+  let button = e.target;
+
+  handleDigitClick(button, calcState);
+  handleOperatorClick(button, calcState);
+  handleEqualClick(button, calcState);
+  handleClearClick(button, calcState);
 });
