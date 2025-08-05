@@ -1,18 +1,93 @@
-.bg-color {
-  background-color: gray;
+:root {
+  --bg-body: #1b1b1b;
+  --bg-calculator: #3a3a3a;
+  --bg-display: #2a2a2a;
+  --btn-default: #3a3a3a;
+  --btn-operator-equal: #2f3344;
+  --btn-clear: #573737;
+  --text-light: #dfdfdf;
+}
+
+body {
+  background-color: var(--bg-body);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
+
+h1 {
+  color: var(--text-light);
+  font-size: 38px;
+  font-weight: bold;
+  margin-bottom: 40px;
 }
 
 .btn {
   width: 64px;
   height: 64px;
-  font-size: 28px;
+  font-size: 30px;
   font-weight: bold;
 }
 
 #display {
-  width: 266px;
+  width: 280px;
   height: 64px;
-  background-color: white;
-  font-size: 28px;
+  color: var(--text-light);
+  background-color: var(--bg-display);
+  font-size: 38px;
   font-weight: bold;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding: 0 8px;
+}
+
+#container {
+  background-color: var(--bg-calculator);
+  width: 320px;
+  height: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+#buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.zero,
+.equal {
+  width: 133px;
+}
+
+button {
+  border-radius: 10px;
+}
+
+.clear {
+  background-color: var(--btn-clear);
+  color: var(--text-light);
+}
+
+.operator,
+.equal {
+  background-color: var(--btn-operator-equal);
+  color: var(--text-light);
+}
+
+.digit,
+.del,
+.decimal {
+  background-color: var(--btn-default);
+  color: var(--text-light);
 }
